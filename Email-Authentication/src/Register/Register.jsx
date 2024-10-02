@@ -5,25 +5,43 @@ import auth from '../Firebase/Firebase.config';
 const Register = () => {
 
   const [registerError,setRegisterError] = useState('')
-
+  const [success,setSuccess] = useState('')
+ 
     const handleRegister = e =>{
         e.preventDefault()
         const email = e.target.email.value
         const password = e.target.password.value
         console.log(email, password)
+      
+        if(password.length <6){
+          setRegisterError(' Password should be at least 6 characters ');
+          return;
+        }
+    
+
+          
+
         
+      //create User
         createUserWithEmailAndPassword(auth,email,password)
         .then(result=>{
             const userRegister = result.user
-            console.log(userRegister)
+             setSuccess('Account is Created, Welcome!')
         })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
           setRegisterError(error.message)
 
           })
-          setRegisterError('')
+
+                  // clear error & success message
+                 
+                  success('')
+                  registerError('')
+
+          
     }
+
 
     return (
    
@@ -61,7 +79,10 @@ const Register = () => {
            </form> 
            {
             registerError && <p className='text-red-600'> {registerError}</p>
-           }       
+           } 
+           {
+            success && <p className='text-green-600'> {success}</p>
+           }      
         </div>
     );
 };
