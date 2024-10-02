@@ -1,8 +1,11 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import React from 'react';
+import React, { useState } from 'react';
 import auth from '../Firebase/Firebase.config';
 
 const Register = () => {
+
+  const [registerError,setRegisterError] = useState('')
+
     const handleRegister = e =>{
         e.preventDefault()
         const email = e.target.email.value
@@ -15,10 +18,11 @@ const Register = () => {
             console.log(userRegister)
         })
         .catch((error) => {
-            if (error.code === 'auth/network-request-failed') {
-              console.log('Network error, please try again later.');
-            }
+          console.log(error)
+          setRegisterError(error.message)
+
           })
+          setRegisterError('')
     }
 
     return (
@@ -54,9 +58,10 @@ const Register = () => {
              <div className="form-control mt-6">
                <button className="btn btn-primary">Register</button>
              </div>
-             
-
-           </form>        
+           </form> 
+           {
+            registerError && <p className='text-red-600'> {registerError}</p>
+           }       
         </div>
     );
 };
