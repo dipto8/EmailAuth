@@ -1,12 +1,12 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import auth from "../Firebase/Firebase.config";
-import { FaEye, FaEyeSlash  } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const [registerError, setRegisterError] = useState("");
   const [success, setSuccess] = useState("");
-  const [showPassword,setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -14,9 +14,9 @@ const Register = () => {
     const password = e.target.password.value;
     console.log(email, password);
 
-        // clear error & success message
-        setRegisterError("");
-        setSuccess(" ");
+    // clear error & success message
+    setRegisterError("");
+    setSuccess(" ");
 
     if (password.length < 6) {
       setRegisterError(" Password should be at least 6 characters ");
@@ -39,8 +39,6 @@ const Register = () => {
         console.error(error);
         setRegisterError(error.message);
       });
-
-
   };
 
   return (
@@ -58,20 +56,28 @@ const Register = () => {
             required
           />
         </div>
+
         <div className="form-control">
           <label className="label">
             <span className="label-text">Password</span>
           </label>
-          <input
-            type={showPassword ? 'text' : "password"}
-            name="password"
-            placeholder="password"
-            className="input input-bordered"
-            required
-           
-          />
-           <span onClick={()=>setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash/> : <FaEye/>}</span>
-        </div>
+         <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="password"
+              className="input input-bordered w-full"
+              required
+            />
+            <span
+              className="absolute top-5 right-5"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+            </div>
+          </div>
+      
         <div className="form-control mt-6">
           <button className="btn btn-primary">Register</button>
         </div>
