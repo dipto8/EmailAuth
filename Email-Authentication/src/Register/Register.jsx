@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
 import auth from "../Firebase/Firebase.config";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -11,6 +11,7 @@ const Register = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
+    const name = e.target.name.value
     const email = e.target.email.value;
     const password = e.target.password.value;
     const condition = e.target.terms.checked;
@@ -38,7 +39,22 @@ const Register = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         const userRegister = result.user;
-        setSuccess("Account is Created | Welcome!!");
+        if(result.user.emailVerified){
+          setSuccess("Account is Created | Welcome!!");
+        }else{
+          setSuccess("Please verify your Email")
+        }
+        // Update Profile
+
+        updateProfile(result.user, {displayName: name})
+        .then()
+        .catch()
+   
+        //Email verification
+        sendEmailVerification(userRegister)
+        .then(()=>{
+          console.log('Please verify your Email')
+        })
       })
 
       .catch((error) => {
@@ -51,6 +67,16 @@ const Register = () => {
     <div>
       <form onSubmit={handleRegister} className="card-body">
         <div className="form-control">
+        <label className="label">
+            <span className="label-text">Profile Name</span>
+          </label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter Profile Name"
+            className="input input-bordered"
+            required
+          />
           <label className="label">
             <span className="label-text">Email</span>
           </label>
